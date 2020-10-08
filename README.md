@@ -13,9 +13,11 @@ The most up-to-date Webpack support is currently on a custom branch of Ruby2JS, 
 gem "ruby2js", github: "jaredcwhite/ruby2js", branch: "es-import-filter"
 ```
 
-Then run `yarn add -D rb2js-loader`.
+and run `bundle install`.
 
-In your existing Rails + ViewComponent setup, add the following configuration initilizer:
+Then run `yarn add -D rb2js-loader` to pull in this Webpack loader plugin.
+
+In your existing Rails + ViewComponent setup, add the following configuration initializer:
 
 `app/config/initializers/rb2js.rb`:
 
@@ -26,6 +28,26 @@ end
 ```
 
 This ensures any `.js.rb` files in your components folder won't get picked up by the Zeitwerk autoloader. Only Webpack + Ruby2JS should look at those files.
+
+You'll also need to tell Webpacker how to use the `rb2js-loader` plugin. In your `config/webpack/environment.js` file, add the follow above the ending `module.exports = environment` file:
+
+```js
+const babelOptions = environment.loaders.get('babel').use[0].options
+
+// Insert rb2js loader at the end of list
+environment.loaders.append('rb2js', {
+  test: /\.js\.rb$/,
+  use: [
+    {
+      loader: "babel-loader",
+      options: {...babelOptions}
+    },
+    "rb2js-loader"
+  ]
+})
+
+module.exports = environment
+```
 
 Now, by way of example, let's create a wrapper component around the [Duet Date Picker](https://duetds.github.io/date-picker/) component we can use to customize the picker component and handle change events.
 
