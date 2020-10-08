@@ -7,6 +7,9 @@
   "author": "Jared White",
   "license": "MIT",
   "private": false,
+  "engines": {
+    "node": ">= 10.13.0"
+  },
   "scripts": {
     "start": "yarn run build -- -w",
     "clean": "del-cli dist",
