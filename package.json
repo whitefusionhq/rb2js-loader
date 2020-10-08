@@ -1,0 +1,28 @@
+{
+  "name": "rb2js-loader",
+  "version": "1.0.0",
+  "description": "Uses Ruby2JS to convert .js.rb files into .js files for Webpack",
+  "main": "dist/cjs.js",
+  "repository": "https://github.com/whitefusionhq/rb2js-loader",
+  "author": "Jared White",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "yarn run build -- -w",
+    "clean": "del-cli dist",
+    "prebuild": "yarn run clean",
+    "build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
+    "release": "standard-version"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "cross-env": "^7.0.2",
+    "del-cli": "^3.0.1",
+    "standard-version": "^8.0.0"
+  }
+}
