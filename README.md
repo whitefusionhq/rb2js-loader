@@ -92,9 +92,9 @@ Hey, what's all this custom element stuff? Well that's what we're going to defin
 Simply create `app/components/date_picker_element.js.rb`:
 
 ```ruby
-require [ LitElement, html ], from: "lit-element"
-require [ DuetDatePicker ], from: "@duetds/date-picker/custom-element"
-require "@duetds/date-picker/dist/duet/themes/default.css"
+import [ LitElement, html ], from: "lit-element"
+import [ DuetDatePicker ], from: "@duetds/date-picker/custom-element"
+import "@duetds/date-picker/dist/duet/themes/default.css"
 
 customElements.define("duet-date-picker", DuetDatePicker)
 
