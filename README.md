@@ -49,6 +49,28 @@ environment.loaders.append('rb2js', {
 module.exports = environment
 ```
 
+Finally, you will need to add a config file for Ruby2JS in order to perform the file conversions. In your root folder (alongside `Gemfile`, `package.json`, etc.), create `rb2js.config.rb`:
+
+```ruby
+require "ruby2js/filter/functions"
+require "ruby2js/filter/camelCase"
+require "ruby2js/filter/tagged_templates"
+require "ruby2js/filter/return"
+require "ruby2js/filter/esimports"
+
+module Ruby2JS
+  class Loader
+    def self.process(source)
+      Ruby2JS.convert(source, eslevel: 2021).to_s
+    end
+  end
+end
+```
+
+You can edit this file as needed to add additional Ruby2JS filters, add configuration options to the converter, and so forth.
+
+----
+
 Now, by way of example, let's create a wrapper component around the [Duet Date Picker](https://duetds.github.io/date-picker/) component we can use to customize the picker component and handle change events.
 
 First, run `yarn add lit-element @duetds/date-picker` to add the Javascript dependencies.
