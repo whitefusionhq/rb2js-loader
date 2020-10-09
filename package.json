@@ -1,6 +1,6 @@
 {
   "name": "rb2js-loader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Uses Ruby2JS to convert .js.rb files into .js files for Webpack",
   "main": "dist/cjs.js",
   "repository": "https://github.com/whitefusionhq/rb2js-loader",
@@ -15,7 +15,7 @@
     "clean": "del-cli dist",
     "prebuild": "yarn run clean",
     "build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
-    "release": "standard-version"
+    "release": "yarn run prebuild && yarn run build && standard-version"
   },
   "files": [
     "dist"
