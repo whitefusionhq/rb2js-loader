@@ -84,7 +84,7 @@ end
 And the Rails view template: `app/components/date_picker_component.html.erb`:
 
 ```eruby
-<app-date-picker identifier="<%= @identifier %>" value="<%= @date.strftime("%Y-%m-%d")"></app-date-picker>
+<app-date-picker identifier="<%= @identifier %>" value="<%= @date.strftime("%Y-%m-%d") %>"></app-date-picker>
 ```
 
 Hey, what's all this custom element stuff? Well that's what we're going to define now! Let's use Ruby to write a web component using the LitElement library.
