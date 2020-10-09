@@ -5,7 +5,7 @@
 
 Webpack loader to compile [Ruby2JS](https://github.com/rubys/ruby2js) (`.js.rb`) files to JavaScript.
 
-## Usage with Rails and ViewComponent
+## Installation
 
 The most up-to-date Webpack support is currently on a custom branch of Ruby2JS, so you will need to add this to your Gemfile:
 
@@ -17,39 +17,7 @@ and run `bundle install`.
 
 Then run `yarn add -D rb2js-loader` to pull in this Webpack loader plugin.
 
-In your existing Rails + ViewComponent setup, add the following configuration initializer:
-
-`app/config/initializers/rb2js.rb`:
-
-```ruby
-Rails.autoloaders.each do |autoloader|
-  autoloader.ignore("app/components/**/*.js.rb")
-end
-```
-
-This ensures any `.js.rb` files in your components folder won't get picked up by the Zeitwerk autoloader. Only Webpack + Ruby2JS should look at those files.
-
-You'll also need to tell Webpacker how to use the `rb2js-loader` plugin. In your `config/webpack/environment.js` file, add the follow above the ending `module.exports = environment` file:
-
-```js
-const babelOptions = environment.loaders.get('babel').use[0].options
-
-// Insert rb2js loader at the end of list
-environment.loaders.append('rb2js', {
-  test: /\.js\.rb$/,
-  use: [
-    {
-      loader: "babel-loader",
-      options: {...babelOptions}
-    },
-    "rb2js-loader"
-  ]
-})
-
-module.exports = environment
-```
-
-Finally, you will need to add a config file for Ruby2JS in order to perform the file conversions. In your root folder (alongside `Gemfile`, `package.json`, etc.), create `rb2js.config.rb`:
+You will need to add a config file for Ruby2JS in order to perform the file conversions. In your root folder (alongside `Gemfile`, `package.json`, etc.), create `rb2js.config.rb`:
 
 ```ruby
 require "ruby2js/filter/functions"
@@ -69,7 +37,74 @@ end
 
 You can edit this file as needed to add additional Ruby2JS filters, add configuration options to the converter, and so forth.
 
-----
+## Webpack Configuration
+
+(For Rails-specific configuration, see below.)
+
+You'll need to edit your Webpack config so it can use the `rb2js-loader` plugin. In your `webpack.config.js` file, add the following in the `modules.rules` section:
+
+```js
+{
+  test: /\.js\.rb$/,
+  use: [
+    {
+      loader: "babel-loader",
+      options: {
+      presets: ["@babel/preset-env"],
+        plugins: [
+          [
+            "@babel/plugin-transform-runtime",
+            {
+              helpers: false,
+            },
+          ],
+        ],
+      }
+    },
+    "rb2js-loader"
+  ]
+}
+```
+
+(If you currently use other Babel plugins elsewhere in your Webpack config, feel free to copy them here, or define them once in a variable up top and simply add them to both parts of the config tree.)
+
+Now wherever you save your `.js` files, you can write `.js.rb` files which will be converted to Javascript and processed through Babel. You'll probably have a main `index.js` file already, so you can simply import the Ruby files from there and elsewhere. You'll have to include the full extension in the import statement, i.e. `import MyClass from "./lib/my_class.js.rb"`.
+
+See the next example in the Rails section for how to write a web component based on open standards using [LitElement](https://lit-element.polymer-project.org).
+
+## Usage with Rails and ViewComponent
+
+In your existing Rails + ViewComponent setup, add the following configuration initializer:
+
+`app/config/initializers/rb2js.rb`:
+
+```ruby
+Rails.autoloaders.each do |autoloader|
+  autoloader.ignore("app/components/**/*.js.rb")
+end
+```
+
+This ensures any `.js.rb` files in your components folder won't get picked up by the Zeitwerk autoloader. Only Webpack + Ruby2JS should look at those files.
+
+You'll also need to tell Webpacker how to use the `rb2js-loader` plugin. In your `config/webpack/environment.js` file, add the following above the ending `module.exports = environment` file:
+
+```js
+const babelOptions = environment.loaders.get('babel').use[0].options
+
+// Insert rb2js loader at the end of list
+environment.loaders.append('rb2js', {
+  test: /\.js\.rb$/,
+  use: [
+    {
+      loader: "babel-loader",
+      options: {...babelOptions}
+    },
+    "rb2js-loader"
+  ]
+})
+
+module.exports = environment
+```
 
 Now, by way of example, let's create a wrapper component around the [Duet Date Picker](https://duetds.github.io/date-picker/) component we can use to customize the picker component and handle change events.
 
@@ -109,7 +144,7 @@ And the Rails view template: `app/components/date_picker_component.html.erb`:
 <app-date-picker identifier="<%= @identifier %>" value="<%= @date.strftime("%Y-%m-%d") %>"></app-date-picker>
 ```
 
-Hey, what's all this custom element stuff? Well that's what we're going to define now! Let's use Ruby to write a web component using the LitElement library.
+Hey, what's all this custom element stuff? Well that's what we're going to define now! Let's use Ruby to write a web component using the [LitElement library](https://lit-element.polymer-project.org).
 
 Simply create `app/components/date_picker_element.js.rb`:
 
