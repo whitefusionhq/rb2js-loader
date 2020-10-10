@@ -130,7 +130,7 @@ function importAll(r) {
 }
 
 importAll(require.context("../components", true, /_component\.js$/))
-importAll(require.context("../components", true, /_element\.js\.rb$/))
+importAll(require.context("../components", true, /_elements?\.js\.rb$/))
 ```
 
 Now we'll write the ViewComponent in `app/components/date_picker_component.rb`:
@@ -162,12 +162,18 @@ import "@duetds/date-picker/dist/duet/themes/default.css"
 customElements.define("duet-date-picker", DuetDatePicker)
 
 export class AppDatePicker < LitElement
-  def self.properties
-    {
-      identifier: {type: String},
-      value: {type: String}
-    }
-  end
+  self.properties = {
+    identifier: { type: String },
+    value: { type: String }
+  }
+
+#  If you need to add custom styles:
+#
+#  self.styles = css <<~CSS
+#    :host {
+#      background: yellow;
+#    }
+#  CSS
 
   def _handle_change(event)
     console.log(event)
