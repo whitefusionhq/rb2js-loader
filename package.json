@@ -1,6 +1,6 @@
 {
   "name": "rb2js-loader",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Uses Ruby2JS to convert .js.rb files into .js files for Webpack",
   "main": "dist/cjs.js",
   "repository": "https://github.com/whitefusionhq/rb2js-loader",
