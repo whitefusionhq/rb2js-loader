@@ -32,7 +32,7 @@ module Ruby2JS
       # Change the options for your configuration here:
       {
         eslevel: 2021,
-        include: [:class]
+        include: :class
       }
     end
 
