@@ -7,10 +7,10 @@ Webpack loader to compile [Ruby2JS](https://github.com/rubys/ruby2js) (`.js.rb`)
 
 ## Installation
 
-The most up-to-date Webpack support is currently on a custom branch of Ruby2JS, so you will need to add this to your Gemfile:
+The most up-to-date Webpack support is currently on the master branch of Ruby2JS, so you will need to add this to your Gemfile:
 
 ```ruby
-gem "ruby2js", github: "jaredcwhite/ruby2js", branch: "es-import-filter"
+gem "ruby2js", github: "rubys/ruby2js"
 ```
 
 and run `bundle install`.
@@ -22,14 +22,22 @@ You will need to add a config file for Ruby2JS in order to perform the file conv
 ```ruby
 require "ruby2js/filter/functions"
 require "ruby2js/filter/camelCase"
-require "ruby2js/filter/tagged_templates"
 require "ruby2js/filter/return"
-require "ruby2js/filter/esimports"
+require "ruby2js/filter/esm"
+require "ruby2js/filter/tagged_templates"
 
 module Ruby2JS
   class Loader
+    def self.options
+      # Change the options for your configuration here:
+      {
+        eslevel: 2021,
+        include: [:class]
+      }
+    end
+
     def self.process(source)
-      Ruby2JS.convert(source, eslevel: 2021).to_s
+      Ruby2JS.convert(source, self.options).to_s
     end
   end
 end
@@ -86,7 +94,7 @@ end
 
 This ensures any `.js.rb` files in your components folder won't get picked up by the Zeitwerk autoloader. Only Webpack + Ruby2JS should look at those files.
 
-You'll also need to tell Webpacker how to use the `rb2js-loader` plugin. In your `config/webpack/environment.js` file, add the following above the ending `module.exports = environment` file:
+You'll also need to tell Webpacker how to use the `rb2js-loader` plugin. In your `config/webpack/environment.js` file, add the following above the ending `module.exports = environment` line:
 
 ```js
 const babelOptions = environment.loaders.get('babel').use[0].options
@@ -102,8 +110,6 @@ environment.loaders.append('rb2js', {
     "rb2js-loader"
   ]
 })
-
-module.exports = environment
 ```
 
 Now, by way of example, let's create a wrapper component around the [Duet Date Picker](https://duetds.github.io/date-picker/) component we can use to customize the picker component and handle change events.
