@@ -5,6 +5,7 @@ npm-debug.log*
 .eslintcache
 /coverage
 /dist
+/_ruby2js_build
 /local
 /reports
 /node_modules

@@ -12,10 +12,11 @@
   },
   "scripts": {
     "start": "yarn run build -- -w",
-    "clean": "del-cli dist",
+    "clean": "del-cli dist && del-cli _ruby2js_build",
     "prebuild": "yarn run clean",
-    "build": "cross-env NODE_ENV=production babel src -d dist --copy-files",
-    "release": "yarn run prebuild && yarn run build && standard-version"
+    "buildruby": "bundle exec ./build_source.rb",
+    "babel": "cross-env NODE_ENV=production babel _ruby2js_build/src -d dist --copy-files",
+    "release": "yarn run prebuild && yarn run buildruby && yarn run babel && standard-version"
   },
   "files": [
     "dist"

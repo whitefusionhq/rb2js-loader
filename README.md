@@ -5,6 +5,8 @@
 
 Webpack loader to compile [Ruby2JS](https://github.com/rubys/ruby2js) (`.js.rb`) files to JavaScript.
 
+**Fun fact:** this loader itself is written in Ruby and compiles via Ruby2JS + Babel. 😁
+
 ## Installation
 
 The most up-to-date Webpack support is currently on the master branch of Ruby2JS, so you will need to add this to your Gemfile:
@@ -32,7 +34,8 @@ module Ruby2JS
       # Change the options for your configuration here:
       {
         eslevel: 2021,
-        include: :class
+        include: :class,
+        underscored_private: true
       }
     end
 
@@ -43,7 +46,7 @@ module Ruby2JS
 end
 ```
 
-You can edit this file as needed to add additional Ruby2JS filters, add configuration options to the converter, and so forth.
+That's just one possible configuration—you can edit this file as needed to modify or add additional Ruby2JS filters, pass options to the converter, and so forth.
 
 ## Webpack Configuration
 
