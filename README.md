@@ -9,10 +9,10 @@ Webpack loader to compile [Ruby2JS](https://github.com/rubys/ruby2js) (`.js.rb`)
 
 ## Installation
 
-The most up-to-date Webpack support is currently on the master branch of Ruby2JS, so you will need to add this to your Gemfile:
+Add the following to your Gemfile:
 
 ```ruby
-gem "ruby2js", github: "rubys/ruby2js"
+gem "ruby2js", ">= 3.4"
 ```
 
 and run `bundle install`.
@@ -199,7 +199,7 @@ export class AppDatePicker < LitElement
 
   def render()
     html <<~HTML
-      <duet-date-picker @duetChange="#{self._handleChange}" identifier="#{self.identifier}" value="#{self.value}"></duet-date-picker>
+      <duet-date-picker @duetChange="#{@handle_change}" identifier="#{self.identifier}" value="#{self.value}"></duet-date-picker>
     HTML
   end
 end
