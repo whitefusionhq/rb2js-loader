@@ -1,6 +1,6 @@
 {
   "name": "rb2js-loader",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "Uses Ruby2JS to convert .js.rb files into .js files for Webpack",
   "main": "dist/cjs.js",
   "repository": "https://github.com/whitefusionhq/rb2js-loader",
@@ -28,5 +28,11 @@
     "cross-env": "^7.0.2",
     "del-cli": "^3.0.1",
     "standard-version": "^8.0.0"
+  },
+  "dependencies": {
+    "loader-utils": "^2.0.0"
+  },
+  "peerDependencies": {
+    "webpack": "^4.27.0 || ^5.0.0"
   }
 }
