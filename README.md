@@ -12,12 +12,12 @@ Webpack loader to compile [Ruby2JS](https://github.com/rubys/ruby2js) (`.js.rb`)
 Add the following to your Gemfile:
 
 ```ruby
-gem "ruby2js", ">= 3.4"
+gem "ruby2js", ">= 3.5"
 ```
 
 and run `bundle install`.
 
-Then run `yarn add -D rb2js-loader` to pull in this Webpack loader plugin.
+Then run `yarn add rb2js-loader` to pull in this Webpack loader plugin.
 
 You will need to add a config file for Ruby2JS in order to perform the file conversions. In your root folder (alongside `Gemfile`, `package.json`, etc.), create `rb2js.config.rb`:
 
