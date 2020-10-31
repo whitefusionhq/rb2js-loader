@@ -28,6 +28,8 @@ require "ruby2js/filter/return"
 require "ruby2js/filter/esm"
 require "ruby2js/filter/tagged_templates"
 
+require "json"
+
 module Ruby2JS
   class Loader
     def self.options
@@ -41,6 +43,14 @@ module Ruby2JS
 
     def self.process(source)
       Ruby2JS.convert(source, self.options).to_s
+    end
+
+    def self.process_with_source_map(source)
+      conv = Ruby2JS.convert(source, self.options)
+      {
+        code: conv.to_s,
+        sourceMap: conv.sourcemap
+      }.to_json
     end
   end
 end
@@ -82,6 +92,24 @@ You'll need to edit your Webpack config so it can use the `rb2js-loader` plugin.
 Now wherever you save your `.js` files, you can write `.js.rb` files which will be converted to Javascript and processed through Babel. You'll probably have a main `index.js` file already, so you can simply import the Ruby files from there and elsewhere. You'll have to include the full extension in the import statement, i.e. `import MyClass from "./lib/my_class.js.rb"`.
 
 See the next example in the Rails section for how to write a web component based on open standards using [LitElement](https://lit-element.polymer-project.org).
+
+## Source Maps
+
+By default, rb2js-loader will provide source maps if requested by Webpack. If you're having trouble debugging code and want to inspect the JS output from Ruby2JS, you can keep source maps on at the Webpack level but _turn them off_ at the rb2js-loader level in your config:
+
+```js
+{
+  use: [
+    // …
+    {
+      loader: "rb2js-loader",
+      options: { provideSourceMaps: false }
+    }
+  ]
+}
+```
+
+Of course to get back to the default behavior, simply change `provideSourceMaps` to `true` or remove it from the options.
 
 ## Usage with Rails and ViewComponent
 
