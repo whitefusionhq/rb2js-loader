@@ -37,8 +37,7 @@ module Ruby2JS
       {
         eslevel: 2021,
         include: :class,
-        underscored_private: true,
-        or: :nullish
+        underscored_private: true
       }
     end
 
